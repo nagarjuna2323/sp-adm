@@ -17,13 +17,13 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public ResponseEntity<List<Student>> fetchAllStudents() {
+        return ResponseEntity.ok(studentService.fetchAllStudents());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        Student student = studentService.getStudentById(id);
+    public ResponseEntity<Student> fetchStudentById(@PathVariable Long id) {
+        Student student = studentService.fetchStudentById(id);
         return student != null ?
             ResponseEntity.ok(student) :
             ResponseEntity.notFound().build();

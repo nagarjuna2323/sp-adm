@@ -23,4 +23,7 @@ public class Student {
     private String email;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column
+    private String branch;
 }
