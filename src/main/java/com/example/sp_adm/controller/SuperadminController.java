@@ -1,6 +1,8 @@
 package com.example.sp_adm.controller;
 
 import com.example.sp_adm.model.Superadmin;
+import com.example.sp_adm.service.SuperadminService;
+import com.example.sp_adm.model.Student;
 import com.example.sp_adm.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/superadmin/api")
 public class SuperadminController {
 
     @Autowired
     private AuthService authService;
+
+     @Autowired
+    private SuperadminService superadminService;
 
     // Get own details (get ID from JWT token)
     @GetMapping("/user-details")
@@ -42,5 +49,15 @@ public class SuperadminController {
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Superadmin not found");
         }
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<List<Student>> getAllStudents() {
+        return ResponseEntity.ok(superadminService.fetchAllStudents());
+    }
+
+    @GetMapping("/students/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        return ResponseEntity.ok(superadminService.fetchStudentById(id));
     }
 }

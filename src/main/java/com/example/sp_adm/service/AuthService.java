@@ -104,6 +104,4 @@ public class AuthService {
     return superadminRepo.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("Superadmin not found"));
 }
-
-
 }
