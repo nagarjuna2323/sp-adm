@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import com.example.sp_adm.dto.StudentProfileUpdateRequest;
+
 
 
 
@@ -28,4 +30,15 @@ public class StudentController {
             ResponseEntity.ok(student) :
             ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/{id}/profile")
+public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody StudentProfileUpdateRequest request) {
+    try {
+        Student updatedStudent = studentService.updateStudentProfile(id, request);
+        return ResponseEntity.ok(updatedStudent);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(404).body(e.getMessage());
+    }
+}
+
 }
