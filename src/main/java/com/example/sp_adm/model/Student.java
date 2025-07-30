@@ -28,26 +28,19 @@ public class Student {
     @Column
     private String branch;
 
-    // Personal Information
-private String fullName;
+private String fullName; 
 private LocalDate dateOfBirth;
 private String gender;
-// private String email;
 private String mobileNumber;
 private String address;
 private String city;
 private String state;
 private String pinCode;
-
-// Educational Information
-//private String branch;
 private String degree;
 private Integer yearOfStudy;
 private Integer currentSemester;
 private Double cgpa;
 private Integer admissionYear;
-
-// Professional Information
 private String internshipCompany;
 private String internshipDuration;
 private String skills;

@@ -20,6 +20,8 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
+    private String fullName;
+
     private String email;
 
     private LocalDateTime createdAt = LocalDateTime.now();

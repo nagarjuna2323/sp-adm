@@ -11,6 +11,8 @@ import com.example.sp_adm.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.sp_adm.dto.RegisterRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -104,4 +106,80 @@ public class AuthService {
     return superadminRepo.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("Superadmin not found"));
 }
+
+ @Transactional
+    public void createUser(RegisterRequest request) {
+        String role = request.getRole();
+        if (role == null) {
+            throw new IllegalArgumentException("Role must be specified for user creation");
+        }
+
+        switch (role.toUpperCase()) {
+            case "STUDENT":
+                if (studentRepo.findByUsername(request.getUsername()).isPresent()) {
+                    throw new RuntimeException("Username already exists for Student");
+                }
+                Student student = new Student();
+                student.setUsername(request.getUsername());
+                student.setPassword(passwordEncoder.encode(request.getPassword()));
+                student.setEmail(request.getEmail());
+                student.setFullName(request.getFullName());
+                student.setBranch(request.getBranch());
+                student.setDegree(request.getDegree());
+                studentRepo.save(student);
+                break;
+
+            case "ADMIN":
+                if (adminRepo.findByUsername(request.getUsername()).isPresent()) {
+                    throw new RuntimeException("Username already exists for Admin");
+                }
+                Admin admin = new Admin();
+                admin.setUsername(request.getUsername());
+                admin.setPassword(passwordEncoder.encode(request.getPassword()));
+                admin.setEmail(request.getEmail());
+                admin.setFullName(request.getFullName());
+                adminRepo.save(admin);
+                break;
+
+            case "SUPERADMIN":
+                if (superadminRepo.findByUsername(request.getUsername()).isPresent()) {
+                    throw new RuntimeException("Username already exists for Superadmin");
+                }
+                Superadmin superadmin = new Superadmin();
+                superadmin.setUsername(request.getUsername());
+                superadmin.setPassword(passwordEncoder.encode(request.getPassword()));
+                superadmin.setEmail(request.getEmail());
+                superadmin.setFullName(request.getFullName());
+                superadminRepo.save(superadmin);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid role: " + role);
+        }
+    }
+
+     public void deleteUserByIdAndRole(String role, Long id) {
+        switch (role.toUpperCase()) {
+            case "STUDENT":
+                if (!studentRepo.existsById(id))
+                    throw new RuntimeException("Student not found with id: " + id);
+                studentRepo.deleteById(id);
+                break;
+
+            case "ADMIN":
+                if (!adminRepo.existsById(id))
+                    throw new RuntimeException("Admin not found with id: " + id);
+                adminRepo.deleteById(id);
+                break;
+
+            case "SUPERADMIN":
+                if (!superadminRepo.existsById(id))
+                    throw new RuntimeException("Superadmin not found with id: " + id);
+                superadminRepo.deleteById(id);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid role: " + role);
+        }
+    }
 }
