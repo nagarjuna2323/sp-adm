@@ -54,4 +54,19 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+     @PostMapping("/register/manager")
+    public ResponseEntity<?> registerManager(@RequestBody RegisterRequest request) {
+        try {
+            String result = authService.registerManager(
+                request.getUsername(),
+                request.getPassword(),
+                request.getEmail(),
+                request.getFullName()
+            );
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
