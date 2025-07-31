@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.sp_adm.dto.RegisterRequest;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.sp_adm.model.Manager;
+import com.example.sp_adm.repository.ManagerRepository;
 
 import java.util.Optional;
 
@@ -32,6 +34,9 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private ManagerRepository managerRepo;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     public String registerSuperadmin(String username, String password, String email) {
@@ -44,6 +49,19 @@ public class AuthService {
         user.setEmail(email);
         superadminRepo.save(user);
         return "Superadmin registered successfully!";
+    }
+
+    public String registerManager(String username, String password, String email, String fullName) {
+        if (managerRepo.findByUsername(username).isPresent()) {
+            throw new RuntimeException("Username already exists for Manager");
+        }
+        Manager manager = new Manager();
+        manager.setUsername(username);
+        manager.setPassword(passwordEncoder.encode(password));
+        manager.setEmail(email);
+        manager.setFullName(fullName);
+        managerRepo.save(manager);
+        return "Manager registered successfully!";
     }
 
     public String registerAdmin(String username, String password, String email) {
@@ -92,6 +110,12 @@ public class AuthService {
             return new AuthResponse(token, "student");
         }
 
+        // check manager
+        Optional<Manager> manager = managerRepo.findByUsername(username);
+    if (manager.isPresent() && passwordEncoder.matches(rawPassword, manager.get().getPassword())) {
+        String token = jwtUtils.generateJwtToken(manager.get().getId(), username, "manager");
+        return new AuthResponse(token, "manager");
+    }
         throw new RuntimeException("Invalid username or password");
     }
 
@@ -128,6 +152,19 @@ public class AuthService {
                 student.setDegree(request.getDegree());
                 studentRepo.save(student);
                 break;
+
+            case "MANAGER":
+                if (managerRepo.findByUsername(request.getUsername()).isPresent()) {
+                    throw new RuntimeException("Manager username already exists");
+                }
+                Manager manager = new Manager();
+                manager.setUsername(request.getUsername());
+                manager.setPassword(passwordEncoder.encode(request.getPassword()));
+                manager.setEmail(request.getEmail());
+                manager.setFullName(request.getFullName());
+                managerRepo.save(manager);
+                break;
+
 
             case "ADMIN":
                 if (adminRepo.findByUsername(request.getUsername()).isPresent()) {
