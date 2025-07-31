@@ -148,7 +148,7 @@ public class SuperadminController {
         return superadminService.fetchStudentByUsername(username)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
+    } 
 
     // Get students by branch
     @PreAuthorize("hasRole('SUPERADMIN')")
@@ -177,3 +177,4 @@ public class SuperadminController {
     }
 
 }
+
