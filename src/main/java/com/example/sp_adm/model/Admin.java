@@ -24,5 +24,7 @@ public class Admin {
 
     private String email;
 
+    private Long managerId;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 }
