@@ -64,17 +64,35 @@ public class AuthService {
         return "Manager registered successfully!";
     }
 
-    public String registerAdmin(String username, String password, String email) {
+    public String registerAdmin(String username, String password, String email, String fullName, Long managerId) {
         if (adminRepo.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists for Admin");
+         }
+    //     Admin user = new Admin();
+    //     user.setUsername(username);
+    //     user.setPassword(passwordEncoder.encode(password));
+    //     user.setEmail(email);
+    //     user.setFullName(fullName);
+    //     user.setManagerId(managerId);
+    //     adminRepo.save(user);
+    //     return "Admin registered successfully!";
+    // }
+            // Long managerId = request.getManagerId();
+        if (managerId == null) {
+            throw new RuntimeException("Manager ID is required to create Admin");
         }
-        Admin user = new Admin();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setEmail(email);
-        adminRepo.save(user);
+        if (!managerRepo.existsById(managerId)) {
+            throw new RuntimeException("Manager not found with ID: " + managerId);  
+        }
+        Admin admin = new Admin();
+        admin.setUsername(username);
+        admin.setPassword(passwordEncoder.encode(password));
+        admin.setEmail(email);
+        admin.setFullName(fullName);
+        admin.setManagerId(managerId);   // set the manager link!
+        adminRepo.save(admin);
         return "Admin registered successfully!";
-    }
+        }
 
     public String registerStudent(String username, String password, String email) {
         if (studentRepo.findByUsername(username).isPresent()) {

@@ -20,9 +20,11 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    private String fullName;
+    private String fullname;
 
     private String email;
+
+    private Long managerId;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }

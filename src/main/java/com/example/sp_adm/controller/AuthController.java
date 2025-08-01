@@ -28,7 +28,7 @@ public class AuthController {
     @PostMapping("/register/admin")
     public ResponseEntity<?> registerAdmin(@RequestBody RegisterRequest request) {
         try {
-            String msg = authService.registerAdmin(request.getUsername(), request.getPassword(), request.getEmail());
+            String msg = authService.registerAdmin(request.getUsername(), request.getPassword(), request.getEmail(), request.getFullName(), request.getManagerId());
             return ResponseEntity.status(HttpStatus.CREATED).body(msg);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
