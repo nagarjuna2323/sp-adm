@@ -91,7 +91,7 @@ public class AuthService {
         admin.setFullName(fullName);
         admin.setManagerId(managerId);   // set the manager link!
         adminRepo.save(admin);
-        return "Admin registered successfully!";
+        return "Admin registered successfully";
         }
 
     public String registerStudent(String username, String password, String email) {
@@ -102,7 +102,7 @@ public class AuthService {
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
-        studentRepo.save(user);
+        studentRepo.save(user); 
         return "Student registered successfully!";
     }
 

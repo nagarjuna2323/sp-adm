@@ -20,7 +20,7 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    private String fullname;
+    private String fullName;
 
     private String email;
 

@@ -31,7 +31,9 @@ public class ManagerController {
 
         taskService.assignTaskToAdmin(managerId, request);
         return ResponseEntity.ok("Task assigned to admin");
+        
     }
+}
 
     // // Get tasks assigned to this manager
     // @PreAuthorize("hasRole('MANAGER')")
@@ -46,4 +48,4 @@ public class ManagerController {
 
     // Additional endpoints can be added here...
 
-}
+
